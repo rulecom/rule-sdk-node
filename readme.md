@@ -1,10 +1,25 @@
-## Subscribers
+<a href="https://rule.io/">
+    <img src="https://app.rule.io/img/logo-full.svg" alt="Rule logo" title="Rule" align="right" height="60" />
+</a>
 
-### Create new subscriber
+# Rule SDK for Node.js
 
----
+## Contents
 
-## **Attributes**
+- [Rule SDK for Node.js](#rule_sdk_for_nodejs)
+  - [Contents](#contents)
+  - [Installation](#installation)
+  - [Usage](#configuration)
+
+## Installation
+
+## Usage
+
+### Subscribers
+
+#### Create new subscriber
+
+**Attributes**
 
 > For more in-depth info regarding each field's functionality for this section, refer to this section of the [Rule API Documentation](https://apidoc.rule.se/#header-attributes)
 
@@ -26,9 +41,7 @@ const subscriber = await SDK.createSubscribers({
 });
 ```
 
-### Get subscribers
-
----
+#### Get subscribers
 
 ```typescript
 const subscribers = await SDK.getSubscribers({
@@ -36,9 +49,7 @@ const subscribers = await SDK.getSubscribers({
 });
 ```
 
-### Get subscriber
-
----
+#### Get subscriber
 
 ```typescript
 const subscriber = await SDK.getSubscriber({
@@ -46,9 +57,7 @@ const subscriber = await SDK.getSubscriber({
 });
 ```
 
-### Get subscriber fields
-
----
+#### Get subscriber fields
 
 ```typescript
 const subscriber = await SDK.getSubscriberFields({
@@ -57,9 +66,7 @@ const subscriber = await SDK.getSubscriberFields({
 })
 ```
 
-### Update subscriber
-
----
+#### Update subscriber
 
 ```typescript
 const subscriber = await SDK.updateSubscriber({
@@ -75,9 +82,7 @@ const subscriber = await SDK.updateSubscriber({
 })
 ```
 
-### Delete subscriber
-
----
+#### Delete subscriber
 
 ```typescript
 const deleted = await SDK.deleteSubscriber({
@@ -86,11 +91,11 @@ const deleted = await SDK.deleteSubscriber({
 })
 ```
 
-## Subscriber Tags
-
-### Create subscriber tag
-
 ---
+
+### Subscriber Tags
+
+#### Create subscriber tag
 
 ```typescript
 const tag = await SDK.createSubscriberTag({
@@ -100,9 +105,7 @@ const tag = await SDK.createSubscriberTag({
 })
 ```
 
-### Get subscriber tags
-
----
+#### Get subscriber tags
 
 ```typescript
 const tags = await SDK.getSubscriberTags({
@@ -111,9 +114,7 @@ const tags = await SDK.getSubscriberTags({
 })
 ```
 
-### Clear subscriber tags
-
----
+#### Clear subscriber tags
 
 ```typescript
 const tags = await SDK.clearSubscriberTags({
@@ -122,9 +123,7 @@ const tags = await SDK.clearSubscriberTags({
 })
 ```
 
-### Delete subscriber tag
-
----
+#### Delete subscriber tag
 
 ```typescript
 const tags = await SDK.deleteSubscriberTag({
@@ -134,9 +133,11 @@ const tags = await SDK.deleteSubscriberTag({
 })
 ```
 
-## Transactions
+---
 
-### Create Transaction
+### Transactions
+
+#### Create Transaction
 
 There are three types of transaction content types, Block content type, HTML Content type and Plain-text Content Type
 
@@ -194,19 +195,15 @@ const tags = await SDK.createTransaction({
 })
 ```
 
-## Templates
+### Templates
 
-### Get Templates
-
----
+#### Get Templates
 
 ```typescript
 const templates = await SDK.getTemplates();
 ```
 
-### Get Template
-
----
+#### Get Template
 
 ```typescript
 const template = await SDK.getTemplate({
@@ -214,11 +211,11 @@ const template = await SDK.getTemplate({
 });
 ```
 
-## Tags
-
-### Get Tags
-
 ---
+
+### Tags
+
+#### Get Tags
 
 ```typescript
 const tags = await SDK.getTags({
@@ -227,9 +224,7 @@ const tags = await SDK.getTags({
 });
 ```
 
-### Get Tag
-
----
+#### Get Tag
 
 ```typescript
 const tag = await SDK.getTag({
@@ -239,9 +234,7 @@ const tag = await SDK.getTag({
 });
 ```
 
-### Update Tag
-
----
+#### Update Tag
 
 ```typescript
 const tag = await SDK.updateTag({
@@ -253,9 +246,7 @@ const tag = await SDK.updateTag({
 });
 ```
 
-### Delete Tag
-
----
+#### Delete Tag
 
 ```typescript
 const tag = await SDK.updateTag({
@@ -263,9 +254,7 @@ const tag = await SDK.updateTag({
 });
 ```
 
-### Clear Tag
-
----
+#### Clear Tag
 
 ```typescript
 const tag = await SDK.updateTag({
@@ -273,11 +262,11 @@ const tag = await SDK.updateTag({
 });
 ```
 
-## Segments
-
-### Get Segments
-
 ---
+
+### Segments
+
+#### Get Segments
 
 ```typescript
 const segments = await SDK.getSegments({
@@ -286,11 +275,9 @@ const segments = await SDK.getSegments({
 });
 ```
 
-## Subscriber Fields
+### Subscriber Fields
 
-### Create Subscriber Groups
-
----
+#### Create Subscriber Groups
 
 ```typescript
 const groupsCreated = await SDK.createGroupsAndFields({
@@ -301,9 +288,7 @@ const groupsCreated = await SDK.createGroupsAndFields({
 });
 ```
 
-### Get Subscriber Groups
-
----
+#### Get Subscriber Groups
 
 ```typescript
 const groups = await SDK.getGroupsWithFields({
@@ -312,9 +297,7 @@ const groups = await SDK.getGroupsWithFields({
 });
 ```
 
-### Get Subscriber Group
-
----
+#### Get Subscriber Group
 
 ```typescript
 const group = await SDK.getGroupWithFields({
@@ -322,11 +305,11 @@ const group = await SDK.getGroupWithFields({
 });
 ```
 
-## Suppressions
-
-### Create Suppression
-
 ---
+
+### Suppressions
+
+#### Create Suppression
 
 ```typescript
 const created = await SDK.createSuppression({
@@ -348,9 +331,7 @@ const created = await SDK.createSuppression({
 });
 ```
 
-### Get Suppressions
-
----
+#### Get Suppressions
 
 ```typescript
 const suppressions = await SDK.getSuppressions({
@@ -359,9 +340,7 @@ const suppressions = await SDK.getSuppressions({
 });
 ```
 
-### Delete Suppressions
-
----
+#### Delete Suppressions
 
 ```typescript
 const deleted = await SDK.deleteSuppressions({
@@ -370,11 +349,11 @@ const deleted = await SDK.deleteSuppressions({
 });
 ```
 
-## Campaigns
-
-### Get Campaigns
-
 ---
+
+### Campaigns
+
+#### Get Campaigns
 
 ```typescript
 const campaigns = await SDK.getCampaigns({
@@ -383,9 +362,7 @@ const campaigns = await SDK.getCampaigns({
 });
 ```
 
-### Create Campaign
-
----
+#### Create Campaign
 
 ```typescript
 const campaign = await SDK.createCampaign({
@@ -424,9 +401,7 @@ const campaign = await SDK.createCampaign({
 });
 ```
 
-### Get Campaign
-
----
+#### Get Campaign
 
 ```typescript
 const campaign = await SDK.getCampaign({
@@ -434,9 +409,7 @@ const campaign = await SDK.getCampaign({
 });
 ```
 
-### Get Campaign Statistics
-
----
+#### Get Campaign Statistics
 
 ```typescript
 const statistics = await SDK.getStatistics({
@@ -444,9 +417,7 @@ const statistics = await SDK.getStatistics({
 });
 ```
 
-### Send Campaign
-
----
+#### Send Campaign
 
 ```typescript
 const statistics = await SDK.sendCampaign({
@@ -485,9 +456,7 @@ const statistics = await SDK.sendCampaign({
 });
 ```
 
-### Delete Campaign
-
----
+#### Delete Campaign
 
 ```typescript
 const deleted = await SDK.deleteCampaign({
@@ -495,9 +464,7 @@ const deleted = await SDK.deleteCampaign({
 });
 ```
 
-### Schedule Campaign
-
----
+#### Schedule Campaign
 
 ```typescript
 const statistics = await SDK.scheduleCampaign({
@@ -537,11 +504,11 @@ const statistics = await SDK.scheduleCampaign({
 });
 ```
 
-## Preferences
-
-### Get Preference Groups
-
 ---
+
+### Preferences
+
+#### Get Preference Groups
 
 ```typescript
 const preferenceGroups = await SDK.getPreferenceGroups({
@@ -551,9 +518,7 @@ const preferenceGroups = await SDK.getPreferenceGroups({
 });
 ```
 
-### Get Preferences By Subscriber And Group ID
-
----
+#### Get Preferences By Subscriber And Group ID
 
 ```typescript
 const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
@@ -563,9 +528,7 @@ const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
 });
 ```
 
-### Update Preferences
-
----
+#### Update Preferences
 
 ```typescript
 const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
