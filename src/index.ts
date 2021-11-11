@@ -29,12 +29,7 @@ import {
   CreateSuppressionOptions,
   GetSuppressionsResponse
 } from "./types/Suppressions";
-import {
-  GetTagsOptions,
-  GetTagsResponse,
-  GetTagOptions,
-  UpdateTagOptions
-} from "./types/Tags";
+import { GetTagsResponse, GetTagOptions, UpdateTagOptions } from "./types/Tags";
 import {
   GetTemplatesResponse,
   GetTemplateOptions,
@@ -136,7 +131,7 @@ export default class RuleSDK {
 
   public getSubscriberFields = async ({
     identifier,
-    identified_by
+    identified_by = "email"
   }: SubscriberSelector) => {
     const sanitizedIdentifier = encodeURIComponent(
       identifier.trim().toLowerCase()
@@ -162,7 +157,7 @@ export default class RuleSDK {
 
   public deleteSubscriber = async ({
     identifier,
-    identified_by
+    identified_by = "email"
   }: SubscriberSelector) => {
     const sanitizedIdentifier = encodeURIComponent(
       identifier.trim().toLowerCase()
@@ -203,7 +198,7 @@ export default class RuleSDK {
 
   public getSubscriberTags = async ({
     identifier,
-    identified_by
+    identified_by = "email"
   }: SubscriberSelector) => {
     const sanitizedIdentifier = encodeURIComponent(
       identifier.trim().toLowerCase()
@@ -221,7 +216,7 @@ export default class RuleSDK {
 
   public clearSubscriberTags = async ({
     identifier,
-    identified_by
+    identified_by = "email"
   }: SubscriberSelector) => {
     const sanitizedIdentifier = encodeURIComponent(
       identifier.trim().toLowerCase()
@@ -373,7 +368,7 @@ export default class RuleSDK {
 
   public createSuppression = async (data: CreateSuppressionOptions) => {
     const response: boolean = await this.wrapRoute(
-      Http.post(`/suppression`, data)
+      Http.post(`/suppressions`, data)
     );
 
     return response;
@@ -381,7 +376,7 @@ export default class RuleSDK {
 
   public getSuppressions = async (data: PaginationOptions) => {
     const response: GetSuppressionsResponse = await this.wrapRoute(
-      Http.get(`/suppression`, { params: data })
+      Http.get(`/suppressions`, { params: data })
     );
 
     return response;
@@ -389,10 +384,10 @@ export default class RuleSDK {
 
   public deleteSuppressions = async ({
     identifier,
-    identified_by
+    identified_by = "email"
   }: DeleteSuppressionOptions) => {
     const response: boolean = await this.wrapRoute(
-      Http.delete(`/suppression/${identifier}`, { params: { identified_by } })
+      Http.delete(`/suppressions/${identifier}`, { params: { identified_by } })
     );
 
     return response;
@@ -449,6 +444,54 @@ export default class RuleSDK {
   public scheduleCampaign = async (data: ScheduleCampaignOptions) => {
     const response: SendCampaignResponse = await this.wrapRoute(
       Http.post(`/campaigns/schedule`, data)
+    );
+
+    return response;
+  };
+
+  public getPreferenceGroups = async (data: GroupOptions) => {
+    const response: Group[] = await this.wrapRoute(
+      Http.get(`/preference-groups`, {
+        params: data
+      })
+    );
+
+    return response;
+  };
+
+  public getPreferencesBySubscriberAndGroups = async (data: GroupOptions) => {
+    const response: Group[] = await this.wrapRoute(
+      Http.get(
+        `/subscriber/${data.identifier}/preference_group/${data.preference_group_id}`,
+        {
+          params: {
+            identified_by: data.identified_by
+          }
+        }
+      )
+    );
+
+    return response;
+  };
+
+  public updatePreferences = async ({
+    identifier,
+    preference_group_id,
+    identified_by,
+    preferences
+  }: UpdateGroupOptions) => {
+    const response: Group[] = await this.wrapRoute(
+      Http.patch(
+        `/subscriber/${identifier}/preference_group/${preference_group_id}`,
+        {
+          preferences
+        },
+        {
+          params: {
+            identified_by
+          }
+        }
+      )
     );
 
     return response;

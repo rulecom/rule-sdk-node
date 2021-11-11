@@ -1,8 +1,9 @@
 import { PaginatedResponse } from "./Pagination";
 type MessageType = "text_message" | "email";
+type Identifier = "email" | "id" | "phone_number";
 
 export interface CreateSuppressionOptions {
-  subscribers: Record<string, number | string>[];
+  subscribers: Record<Identifier, number | string>[];
   suppress_on?: {
     campaign?: MessageType[];
     transaction?: MessageType[];

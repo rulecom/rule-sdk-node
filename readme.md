@@ -193,3 +193,388 @@ const tags = await SDK.createTransaction({
   content: EmailBlockContent[] | EmailHTMLContent | string;
 })
 ```
+
+## Templates
+
+### Get Templates
+
+---
+
+```typescript
+const templates = await SDK.getTemplates();
+```
+
+### Get Template
+
+---
+
+```typescript
+const template = await SDK.getTemplate({
+  id: number
+});
+```
+
+## Tags
+
+### Get Tags
+
+---
+
+```typescript
+const tags = await SDK.getTags({
+  limit?: number;
+  page?: number;
+});
+```
+
+### Get Tag
+
+---
+
+```typescript
+const tag = await SDK.getTag({
+  identifier: string | number;
+  identified_by?: "name" | "id";
+  with_count?: boolean;
+});
+```
+
+### Update Tag
+
+---
+
+```typescript
+const tag = await SDK.updateTag({
+  identifier: string | number;
+  data: {
+    name?: string;
+    description?: string;
+  };
+});
+```
+
+### Delete Tag
+
+---
+
+```typescript
+const tag = await SDK.updateTag({
+  identifier: string | number;
+});
+```
+
+### Clear Tag
+
+---
+
+```typescript
+const tag = await SDK.updateTag({
+  identifier: string | number;
+});
+```
+
+## Segments
+
+### Get Segments
+
+---
+
+```typescript
+const segments = await SDK.getSegments({
+  limit?: number;
+  page?: number;
+});
+```
+
+## Subscriber Fields
+
+### Create Subscriber Groups
+
+---
+
+```typescript
+const groupsCreated = await SDK.createGroupsAndFields({
+  fields: [{
+    key: string;
+    type?: "text" | "date" | "datetime" | "multiple" | "json";
+  }];
+});
+```
+
+### Get Subscriber Groups
+
+---
+
+```typescript
+const groups = await SDK.getGroupsWithFields({
+  limit?: number;
+  page?: number;
+});
+```
+
+### Get Subscriber Group
+
+---
+
+```typescript
+const group = await SDK.getGroupWithFields({
+  identifier: number | string;
+});
+```
+
+## Suppressions
+
+### Create Suppression
+
+---
+
+```typescript
+const created = await SDK.createSuppression({
+  subscribers: [
+    {
+      "email": string;
+    },
+    {
+      "phone_number": string;
+    },
+    {
+      "id": number;
+    }
+  ];
+  suppress_on?: {
+    campaign?: ["text_message" | "email"];
+    transaction?: ["text_message" | "email"];
+  };
+});
+```
+
+### Get Suppressions
+
+---
+
+```typescript
+const suppressions = await SDK.getSuppressions({
+  limit?: number;
+  page?: number;
+});
+```
+
+### Delete Suppressions
+
+---
+
+```typescript
+const deleted = await SDK.deleteSuppressions({
+  identifier: string | number;
+  identified_by?: "email" | "phone_number" | "id";
+});
+```
+
+## Campaigns
+
+### Get Campaigns
+
+---
+
+```typescript
+const campaigns = await SDK.getCampaigns({
+  limit?: number;
+  page?: number;
+});
+```
+
+### Create Campaign
+
+---
+
+```typescript
+const campaign = await SDK.createCampaign({
+  message_type: "email" | "text_message";
+  language: string;
+  subject: string;
+  recipients: {
+    tags?: [{
+      identifier: string;
+    }];
+    segments?: [{
+      identifier: string;
+      negative: boolean;
+    }];
+  };
+  from: {
+    name: string;
+    email?: string;
+    phone_number?: string;
+  };
+  email_template_id?: number;
+  content: [{
+    block_id: string;
+    block_content: [
+      {
+        title: string;
+        body: string;
+        image?: string;
+        url?: string;
+      }
+    ];
+  }] | {
+    plain: string;
+    html: string;
+  } | string;
+});
+```
+
+### Get Campaign
+
+---
+
+```typescript
+const campaign = await SDK.getCampaign({
+  id: number;
+});
+```
+
+### Get Campaign Statistics
+
+---
+
+```typescript
+const statistics = await SDK.getStatistics({
+  id: number;
+});
+```
+
+### Send Campaign
+
+---
+
+```typescript
+const statistics = await SDK.sendCampaign({
+  message_type: "email" | "text_message";
+  language: string;
+  subject: string;
+  recipients: {
+    tags?: [{
+      identifier: string;
+    }];
+    segments?: [{
+      identifier: string;
+      negative: boolean;
+    }];
+  };
+  from: {
+    name: string;
+    email?: string;
+    phone_number?: string;
+  };
+  email_template_id?: number;
+  content: [{
+    block_id: string;
+    block_content: [
+      {
+        title: string;
+        body: string;
+        image?: string;
+        url?: string;
+      }
+    ];
+  }] | {
+    plain: string;
+    html: string;
+  } | string;
+});
+```
+
+### Delete Campaign
+
+---
+
+```typescript
+const deleted = await SDK.deleteCampaign({
+  id: number;
+});
+```
+
+### Schedule Campaign
+
+---
+
+```typescript
+const statistics = await SDK.scheduleCampaign({
+  message_type: "email" | "text_message";
+  language: string;
+  subject: string;
+  recipients: {
+    tags?: [{
+      identifier: string;
+    }];
+    segments?: [{
+      identifier: string;
+      negative: boolean;
+    }];
+  };
+  from: {
+    name: string;
+    email?: string;
+    phone_number?: string;
+  };
+  email_template_id?: number;
+  send_at: string;
+  content: [{
+    block_id: string;
+    block_content: [
+      {
+        title: string;
+        body: string;
+        image?: string;
+        url?: string;
+      }
+    ];
+  }] | {
+    plain: string;
+    html: string;
+  } | string;
+});
+```
+
+## Preferences
+
+### Get Preference Groups
+
+---
+
+```typescript
+const preferenceGroups = await SDK.getPreferenceGroups({
+  preference_group_id: number;
+  identifier: string | number;
+  identified_by?: "phone_number" | "id" | "email";
+});
+```
+
+### Get Preferences By Subscriber And Group ID
+
+---
+
+```typescript
+const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
+  preference_group_id: number;
+  identifier: string | number;
+  identified_by?: "phone_number" | "id" | "email";
+});
+```
+
+### Update Preferences
+
+---
+
+```typescript
+const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
+  preference_group_id: number;
+  identifier: string | number;
+  identified_by?: "phone_number" | "id" | "email";
+  preferences: [{
+    preference_id: number;
+    is_opted_in: boolean;
+  }]
+});
+```
