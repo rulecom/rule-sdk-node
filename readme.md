@@ -4,34 +4,100 @@
 
 # Rule SDK for Node.js
 
+Rule node API wrapper for the [Rule v2 API](https://apidoc.rule.se/).
+
 ## Contents
 
-- [Rule SDK for Node.js](#rule_sdk_for_nodejs)
+- [Rule SDK for Node.js](#rule-sdk-for-nodejs)
   - [Contents](#contents)
   - [Installation](#installation)
-  - [Usage](#configuration)
+  - [Usage](#usage)
+    - [Initialization](#initialization)
+    - [Subscribers](#subscribers)
+      - [Create new subscriber](#create-new-subscriber)
+      - [Get subscribers](#get-subscribers)
+      - [Get subscriber](#get-subscriber)
+      - [Get subscriber fields](#get-subscriber-fields)
+      - [Update subscriber](#update-subscriber)
+      - [Delete subscriber](#delete-subscriber)
+    - [Subscriber Tags](#subscriber-tags)
+      - [Create subscriber tag](#create-subscriber-tag)
+      - [Get subscriber tags](#get-subscriber-tags)
+      - [Clear subscriber tags](#clear-subscriber-tags)
+      - [Delete subscriber tag](#delete-subscriber-tag)
+    - [Transactions](#transactions)
+      - [Create Transaction](#create-transaction)
+    - [Templates](#templates)
+      - [Get Templates](#get-templates)
+      - [Get Template](#get-template)
+    - [Tags](#tags)
+      - [Get Tags](#get-tags)
+      - [Get Tag](#get-tag)
+      - [Update Tag](#update-tag)
+      - [Delete Tag](#delete-tag)
+      - [Clear Tag](#clear-tag)
+    - [Segments](#segments)
+      - [Get Segments](#get-segments)
+    - [Subscriber Fields](#subscriber-fields)
+      - [Create Subscriber Groups](#create-subscriber-groups)
+      - [Get Subscriber Groups](#get-subscriber-groups)
+      - [Get Subscriber Group](#get-subscriber-group)
+    - [Suppressions](#suppressions)
+      - [Create Suppression](#create-suppression)
+      - [Get Suppressions](#get-suppressions)
+      - [Delete Suppressions](#delete-suppressions)
+    - [Campaigns](#campaigns)
+      - [Get Campaigns](#get-campaigns)
+      - [Create Campaign](#create-campaign)
+      - [Get Campaign](#get-campaign)
+      - [Get Campaign Statistics](#get-campaign-statistics)
+      - [Send Campaign](#send-campaign)
+      - [Delete Campaign](#delete-campaign)
+      - [Schedule Campaign](#schedule-campaign)
+    - [Preferences](#preferences)
+      - [Get Preference Groups](#get-preference-groups)
+      - [Get Preferences By Subscriber And Group ID](#get-preferences-by-subscriber-and-group-id)
+      - [Update Preferences](#update-preferences)
 
 ## Installation
 
+```console
+# via npm
+npm install rule-sdk-node
+
+# via yarn
+yarn add rule-sdk-node
+```
+
 ## Usage
+
+More in-depth information regarding all routes and fields can be found in the [Rule API Documentation](https://apidoc.rule.se/).
+
+---
+
+### Initialization
+
+To be able to send requests using the Rule API you must initialize the SDK with a valid Rule API key generated from the [Rule developer tab](https://app.rule.io/#/settings/developer).
+
+```typescript
+const rule = new RuleSDK({ apiKey: “…” });
+```
+
+---
 
 ### Subscribers
 
 #### Create new subscriber
 
-**Attributes**
-
-> For more in-depth info regarding each field's functionality for this section, refer to this section of the [Rule API Documentation](https://apidoc.rule.se/#header-attributes)
-
 ```typescript
-const subscriber = await SDK.createSubscribers({
+const subscriber = await rule.createSubscribers({
   update_on_duplicate?: boolean;
   automation?: false | "reset" | "force";
   sync_subscribers?: boolean; // If omitted, automations are sent if there are less than 20 subscribers in the request.
   fields_clear?: boolean;
-  tags: string[], // can consist of both names and/or ID’s of already existing tags (N.B. this means that tags consisting only of integers will be interpreted as IDs and not as text). If a tag does not exist it will be created.
+  tags: string[], // Can consist of both names and/or ID’s of already existing tags (N.B. this means that tags consisting only of integers will be interpreted as IDs and not as text). If a tag does not exist it will be created.
   subscribers: [{
-    language?: string; // (optional) Needs to be ISO 639-1 formatted. If no language is passed the subscriber will default to the account language.
+    language?: string; // (Optional) Needs to be ISO 639-1 formatted. If no language is passed the subscriber will default to the account language.
     fields: [{
       key: string;
       type?: "text" || "date" || "datetime" || "multiple" || "json";
@@ -44,7 +110,7 @@ const subscriber = await SDK.createSubscribers({
 #### Get subscribers
 
 ```typescript
-const subscribers = await SDK.getSubscribers({
+const subscribers = await rule.getSubscribers({
   limit: number // Optional, max value is 100
 });
 ```
@@ -52,7 +118,7 @@ const subscribers = await SDK.getSubscribers({
 #### Get subscriber
 
 ```typescript
-const subscriber = await SDK.getSubscriber({
+const subscriber = await rule.getSubscriber({
   limit: number // Optional, max value is 100
 });
 ```
@@ -60,7 +126,7 @@ const subscriber = await SDK.getSubscriber({
 #### Get subscriber fields
 
 ```typescript
-const subscriber = await SDK.getSubscriberFields({
+const subscriber = await rule.getSubscriberFields({
   identifier: string;
   identified_by?: "email" | "phone_number" | "id";
 })
@@ -69,7 +135,7 @@ const subscriber = await SDK.getSubscriberFields({
 #### Update subscriber
 
 ```typescript
-const subscriber = await SDK.updateSubscriber({
+const subscriber = await rule.updateSubscriber({
   id: number;
   data?: { // All fields are optional, so only the ones you specify below will be updated
     language?: string;
@@ -85,7 +151,7 @@ const subscriber = await SDK.updateSubscriber({
 #### Delete subscriber
 
 ```typescript
-const deleted = await SDK.deleteSubscriber({
+const deleted = await rule.deleteSubscriber({
   identifier: string;
   identified_by?: "email" | "phone_number" | "id";
 })
@@ -98,7 +164,7 @@ const deleted = await SDK.deleteSubscriber({
 #### Create subscriber tag
 
 ```typescript
-const tag = await SDK.createSubscriberTag({
+const tag = await rule.createSubscriberTag({
   identifier: string;
   identified_by?: "email" | "phone_number" | "id";
   tags: string[]
@@ -108,7 +174,7 @@ const tag = await SDK.createSubscriberTag({
 #### Get subscriber tags
 
 ```typescript
-const tags = await SDK.getSubscriberTags({
+const tags = await rule.getSubscriberTags({
   identifier: string;
   identified_by?: "email" | "phone_number" | "id";
 })
@@ -117,7 +183,7 @@ const tags = await SDK.getSubscriberTags({
 #### Clear subscriber tags
 
 ```typescript
-const tags = await SDK.clearSubscriberTags({
+const tags = await rule.clearSubscriberTags({
   identifier: string;
   identified_by?: "email" | "phone_number" | "id";
 })
@@ -126,7 +192,7 @@ const tags = await SDK.clearSubscriberTags({
 #### Delete subscriber tag
 
 ```typescript
-const tags = await SDK.deleteSubscriberTag({
+const tags = await rule.deleteSubscriberTag({
   identifier: string;
   identified_by?: "email" | "phone_number" | "id";
   tag_identifier: string
@@ -185,7 +251,7 @@ There are three types of transaction content types, Block content type, HTML Con
 Here's an example of how you can specify those content types
 
 ```typescript
-const tags = await SDK.createTransaction({
+const tags = await rule.createTransaction({
   transaction_type: "email" | "text_message";
   transaction_name: string;
   subject: string;
@@ -195,18 +261,20 @@ const tags = await SDK.createTransaction({
 })
 ```
 
+---
+
 ### Templates
 
 #### Get Templates
 
 ```typescript
-const templates = await SDK.getTemplates();
+const templates = await rule.getTemplates();
 ```
 
 #### Get Template
 
 ```typescript
-const template = await SDK.getTemplate({
+const template = await rule.getTemplate({
   id: number
 });
 ```
@@ -218,7 +286,7 @@ const template = await SDK.getTemplate({
 #### Get Tags
 
 ```typescript
-const tags = await SDK.getTags({
+const tags = await rule.getTags({
   limit?: number;
   page?: number;
 });
@@ -227,7 +295,7 @@ const tags = await SDK.getTags({
 #### Get Tag
 
 ```typescript
-const tag = await SDK.getTag({
+const tag = await rule.getTag({
   identifier: string | number;
   identified_by?: "name" | "id";
   with_count?: boolean;
@@ -237,7 +305,7 @@ const tag = await SDK.getTag({
 #### Update Tag
 
 ```typescript
-const tag = await SDK.updateTag({
+const tag = await rule.updateTag({
   identifier: string | number;
   data: {
     name?: string;
@@ -249,7 +317,7 @@ const tag = await SDK.updateTag({
 #### Delete Tag
 
 ```typescript
-const tag = await SDK.updateTag({
+const tag = await rule.updateTag({
   identifier: string | number;
 });
 ```
@@ -257,7 +325,7 @@ const tag = await SDK.updateTag({
 #### Clear Tag
 
 ```typescript
-const tag = await SDK.updateTag({
+const tag = await rule.updateTag({
   identifier: string | number;
 });
 ```
@@ -269,18 +337,20 @@ const tag = await SDK.updateTag({
 #### Get Segments
 
 ```typescript
-const segments = await SDK.getSegments({
+const segments = await rule.getSegments({
   limit?: number;
   page?: number;
 });
 ```
+
+---
 
 ### Subscriber Fields
 
 #### Create Subscriber Groups
 
 ```typescript
-const groupsCreated = await SDK.createGroupsAndFields({
+const groupsCreated = await rule.createGroupsAndFields({
   fields: [{
     key: string;
     type?: "text" | "date" | "datetime" | "multiple" | "json";
@@ -291,7 +361,7 @@ const groupsCreated = await SDK.createGroupsAndFields({
 #### Get Subscriber Groups
 
 ```typescript
-const groups = await SDK.getGroupsWithFields({
+const groups = await rule.getGroupsWithFields({
   limit?: number;
   page?: number;
 });
@@ -300,7 +370,7 @@ const groups = await SDK.getGroupsWithFields({
 #### Get Subscriber Group
 
 ```typescript
-const group = await SDK.getGroupWithFields({
+const group = await rule.getGroupWithFields({
   identifier: number | string;
 });
 ```
@@ -312,7 +382,7 @@ const group = await SDK.getGroupWithFields({
 #### Create Suppression
 
 ```typescript
-const created = await SDK.createSuppression({
+const created = await rule.createSuppression({
   subscribers: [
     {
       "email": string;
@@ -334,7 +404,7 @@ const created = await SDK.createSuppression({
 #### Get Suppressions
 
 ```typescript
-const suppressions = await SDK.getSuppressions({
+const suppressions = await rule.getSuppressions({
   limit?: number;
   page?: number;
 });
@@ -343,7 +413,7 @@ const suppressions = await SDK.getSuppressions({
 #### Delete Suppressions
 
 ```typescript
-const deleted = await SDK.deleteSuppressions({
+const deleted = await rule.deleteSuppressions({
   identifier: string | number;
   identified_by?: "email" | "phone_number" | "id";
 });
@@ -356,7 +426,7 @@ const deleted = await SDK.deleteSuppressions({
 #### Get Campaigns
 
 ```typescript
-const campaigns = await SDK.getCampaigns({
+const campaigns = await rule.getCampaigns({
   limit?: number;
   page?: number;
 });
@@ -365,7 +435,7 @@ const campaigns = await SDK.getCampaigns({
 #### Create Campaign
 
 ```typescript
-const campaign = await SDK.createCampaign({
+const campaign = await rule.createCampaign({
   message_type: "email" | "text_message";
   language: string;
   subject: string;
@@ -404,7 +474,7 @@ const campaign = await SDK.createCampaign({
 #### Get Campaign
 
 ```typescript
-const campaign = await SDK.getCampaign({
+const campaign = await rule.getCampaign({
   id: number;
 });
 ```
@@ -412,7 +482,7 @@ const campaign = await SDK.getCampaign({
 #### Get Campaign Statistics
 
 ```typescript
-const statistics = await SDK.getStatistics({
+const statistics = await rule.getStatistics({
   id: number;
 });
 ```
@@ -420,7 +490,7 @@ const statistics = await SDK.getStatistics({
 #### Send Campaign
 
 ```typescript
-const statistics = await SDK.sendCampaign({
+const statistics = await rule.sendCampaign({
   message_type: "email" | "text_message";
   language: string;
   subject: string;
@@ -459,7 +529,7 @@ const statistics = await SDK.sendCampaign({
 #### Delete Campaign
 
 ```typescript
-const deleted = await SDK.deleteCampaign({
+const deleted = await rule.deleteCampaign({
   id: number;
 });
 ```
@@ -467,7 +537,7 @@ const deleted = await SDK.deleteCampaign({
 #### Schedule Campaign
 
 ```typescript
-const statistics = await SDK.scheduleCampaign({
+const statistics = await rule.scheduleCampaign({
   message_type: "email" | "text_message";
   language: string;
   subject: string;
@@ -511,7 +581,7 @@ const statistics = await SDK.scheduleCampaign({
 #### Get Preference Groups
 
 ```typescript
-const preferenceGroups = await SDK.getPreferenceGroups({
+const preferenceGroups = await rule.getPreferenceGroups({
   preference_group_id: number;
   identifier: string | number;
   identified_by?: "phone_number" | "id" | "email";
@@ -521,7 +591,7 @@ const preferenceGroups = await SDK.getPreferenceGroups({
 #### Get Preferences By Subscriber And Group ID
 
 ```typescript
-const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
+const preferenceGroups = await rule.getPreferencesBySubscriberAndGroups({
   preference_group_id: number;
   identifier: string | number;
   identified_by?: "phone_number" | "id" | "email";
@@ -531,7 +601,7 @@ const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
 #### Update Preferences
 
 ```typescript
-const preferenceGroups = await SDK.getPreferencesBySubscriberAndGroups({
+const preferenceGroups = await rule.getPreferencesBySubscriberAndGroups({
   preference_group_id: number;
   identifier: string | number;
   identified_by?: "phone_number" | "id" | "email";
