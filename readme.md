@@ -4,7 +4,7 @@
 
 # Rule SDK for Node.js
 
-Rule node API wrapper for the [Rule v2 API](https://apidoc.rule.se/).
+Rule node API wrapper for the [Rule v2 API](https://apidoc.rule.se/). Supports promise handling.
 
 ## Contents
 
@@ -58,10 +58,11 @@ Rule node API wrapper for the [Rule v2 API](https://apidoc.rule.se/).
       - [Get Preference Groups](#get-preference-groups)
       - [Get Preferences By Subscriber And Group ID](#get-preferences-by-subscriber-and-group-id)
       - [Update Preferences](#update-preferences)
+  - [License](#license)
 
 ## Installation
 
-```console
+```bash
 # via npm
 npm install rule-sdk-node
 
@@ -611,3 +612,6 @@ const preferenceGroups = await rule.getPreferencesBySubscriberAndGroups({
   }]
 });
 ```
+
+## License
+[MIT](/LICENSE)
