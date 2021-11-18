@@ -1,5 +1,5 @@
 {
-  "name": "rule-sdk",
+  "name": "rule-sdk-node",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "MIT",
@@ -14,7 +14,11 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "build:publish": "tsc && yarn publish"
+    "build:publish": "tsc && yarn publish",
+    "build:publish:major": "tsc && yarn version major && yarn publish",
+    "build:publish:minor": "tsc && yarn version minor && yarn publish",
+    "build:publish:patch": "tsc && yarn version patch && yarn publish",
+    "build:publish:prerelease": "tsc && yarn version prerelease && yarn publish"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
