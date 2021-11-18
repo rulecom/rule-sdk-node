@@ -8,11 +8,11 @@ interface SavedTag {
   name: string;
 }
 
-interface SubscriberFields {
+export interface SubscriberFields {
   id?: number;
   key: string;
   type?: "text" | "date" | "datetime" | "multiple" | "json";
-  value: string;
+  value: string | Date | any[] | object;
 }
 
 interface Subscriber {

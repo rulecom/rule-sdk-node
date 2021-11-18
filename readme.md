@@ -88,7 +88,9 @@ const rule = new RuleSDK({ apiKey: “…” });
 
 ### Subscribers
 
-#### Create new subscriber
+#### Create new subscribers
+
+Creates new subscribers, you can also not specify the `type` field in the `fields` array if you're unsure of the field's value type and the SDK will attempt to automatically identify it
 
 ```typescript
 const subscriber = await rule.createSubscribers({
@@ -614,4 +616,5 @@ const preferenceGroups = await rule.getPreferencesBySubscriberAndGroups({
 ```
 
 ## License
+
 [MIT](/LICENSE)

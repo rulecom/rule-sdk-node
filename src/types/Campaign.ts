@@ -34,6 +34,8 @@ export interface GetCampaignsResponse extends PaginatedResponse {
   campaigns: Campaign[];
 }
 
+export type UnifiedContent = EmailBlockContent[] | EmailHTMLContent | string;
+
 export interface CreateCampaignOptions {
   message_type: "email" | "text_message";
   language: string;
@@ -48,7 +50,7 @@ export interface CreateCampaignOptions {
     phone_number?: string;
   };
   email_template_id?: number;
-  content: EmailBlockContent[] | EmailHTMLContent | string;
+  content: UnifiedContent;
 }
 
 export interface ScheduleCampaignOptions extends CreateCampaignOptions {
