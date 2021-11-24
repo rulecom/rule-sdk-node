@@ -9,7 +9,7 @@ export interface Tag {
   id: number;
   name: string;
   description: string;
-  recipient_count?: number;
+  recipient_count?: string;
   created_at: string;
   updated_at: string;
 }

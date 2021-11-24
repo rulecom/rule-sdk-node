@@ -3,7 +3,7 @@ import { Segment } from "./Segments";
 
 type Tag = string | number;
 
-interface SavedTag {
+export interface SavedTag {
   id: string;
   name: string;
 }
@@ -53,8 +53,8 @@ export interface CreateSubscriberOptions {
 }
 
 export interface CreateSubscriberResponse {
-  subscriber?: CombinedSubscriber;
-  subscribers?: CombinedSubscriber[];
+  subscriber?: SavedSubscriber;
+  subscribers?: SavedSubscriber[];
   suppressed: CombinedSubscriber[];
 }
 
@@ -86,7 +86,7 @@ export interface GetSubscriberFieldsResponse {
 }
 
 export interface UpdateSubscriberOptions {
-  id: number;
+  id: string | number;
   data: Partial<CombinedSubscriber>;
 }
 

@@ -54,7 +54,7 @@ export interface CreateCampaignOptions {
 }
 
 export interface ScheduleCampaignOptions extends CreateCampaignOptions {
-  send_at: string;
+  send_at: Date | string;
 }
 
 export interface CreateCampaignResponse extends Campaign {
@@ -102,6 +102,5 @@ export interface CampaignStatistics {
 }
 
 export interface SendCampaignResponse {
-  success: true;
   campaign_id: string;
 }

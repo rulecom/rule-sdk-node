@@ -1,6 +1,7 @@
 import Http, { AxiosError, AxiosResponse } from "axios";
 import { Buffer } from "buffer";
 import config from "./config";
+import APIError from "./utils/APIError";
 import {
   CombinedSubscriber,
   DeleteSubscriberTagOptions,
@@ -13,7 +14,7 @@ import {
 } from "./types/SubscriberFields";
 import { PaginationOptions } from "./types/Pagination";
 import { GetGroupOptions, Group } from "./types/SubscriberFields";
-import { DeleteTagOptions } from "./types/Tags";
+import { DeleteTagOptions, Tag } from "./types/Tags";
 import { DeleteSuppressionOptions } from "./types/Suppressions";
 import {
   SendCampaignResponse,
@@ -86,11 +87,11 @@ export default class RuleSDK {
   ): Promise<boolean | any> => {
     try {
       const {
-        data: { message, ...response }
+        data: { message, success, ...response }
       } = await routeRequest;
 
       if (!Object.keys(response).length) {
-        return message === "Success";
+        return message?.toLowerCase() === "success" || success;
       }
 
       return response;
@@ -119,10 +120,16 @@ export default class RuleSDK {
 
           if (field.type && field.value instanceof Date) {
             if (field.type === "date") {
-              return { ...field, value: field.value.toISOString() };
+              return {
+                ...field,
+                value: field.value.toISOString().split("T")[0]
+              };
             }
 
-            return { ...field, value: field.value.toISOString().split("T")[0] };
+            return {
+              ...field,
+              value: field.value.toISOString()
+            };
           }
 
           if (typeof field.value === "string") {
@@ -186,10 +193,15 @@ export default class RuleSDK {
     return response;
   };
 
-  public getSubscriber = async (options: GetSubscribersOptions) => {
+  public getSubscriber = async ({
+    identifier,
+    identified_by
+  }: SubscriberSelector) => {
     const response: GetSubscriberResponse = await this.wrapRoute(
-      Http.get("/subscribers", {
-        params: options
+      Http.get(`/subscribers/${identifier}`, {
+        params: {
+          identified_by
+        }
       })
     );
 
@@ -214,7 +226,7 @@ export default class RuleSDK {
       identifier.trim().toLowerCase()
     );
     const response: GetSubscriberFieldsResponse = await this.wrapRoute(
-      Http.get(`/subscriber/${sanitizedIdentifier}`, {
+      Http.get(`/subscriber/${sanitizedIdentifier}/fields`, {
         params: {
           identified_by
         }
@@ -226,7 +238,7 @@ export default class RuleSDK {
 
   public updateSubscriber = async (updatedData: UpdateSubscriberOptions) => {
     const response: GetSubscriberResponse = await this.wrapRoute(
-      Http.put(`/subscriber/${updatedData.id}`, updatedData.data)
+      Http.put(`/subscribers/${updatedData.id}`, updatedData.data)
     );
 
     return response.subscriber;
@@ -240,7 +252,7 @@ export default class RuleSDK {
       identifier.trim().toLowerCase()
     );
     const response: boolean = await this.wrapRoute(
-      Http.delete(`/subscriber/${sanitizedIdentifier}`, {
+      Http.delete(`/subscribers/${sanitizedIdentifier}`, {
         params: {
           identified_by
         }
@@ -260,7 +272,7 @@ export default class RuleSDK {
     );
     const response: boolean = await this.wrapRoute(
       Http.post(
-        `/subscriber/${sanitizedIdentifier}/tags`,
+        `/subscribers/${sanitizedIdentifier}/tags`,
         { tags },
         {
           params: {
@@ -281,14 +293,14 @@ export default class RuleSDK {
       identifier.trim().toLowerCase()
     );
     const response: SubscriberTagsResponse = await this.wrapRoute(
-      Http.get(`/subscriber/${sanitizedIdentifier}/tags/clear`, {
+      Http.get(`/subscribers/${sanitizedIdentifier}/tags`, {
         params: {
           identified_by
         }
       })
     );
 
-    return response;
+    return response.tags;
   };
 
   public clearSubscriberTags = async ({
@@ -299,7 +311,7 @@ export default class RuleSDK {
       identifier.trim().toLowerCase()
     );
     const response: boolean = await this.wrapRoute(
-      Http.delete(`/subscriber/${sanitizedIdentifier}/tags/clear`, {
+      Http.delete(`/subscribers/${sanitizedIdentifier}/tags/clear`, {
         params: {
           identified_by
         }
@@ -318,19 +330,26 @@ export default class RuleSDK {
       identifier.trim().toLowerCase()
     );
     const response: boolean = await this.wrapRoute(
-      Http.delete(`/subscriber/${sanitizedIdentifier}/tags/${tag_identifier}`, {
-        params: {
-          identified_by
+      Http.delete(
+        `/subscribers/${sanitizedIdentifier}/tags/${tag_identifier}`,
+        {
+          params: {
+            identified_by
+          }
         }
-      })
+      )
     );
 
     return response;
   };
 
   public createTransaction = async (transaction: CreateTransactionOptions) => {
+    const parsedData = {
+      ...transaction,
+      content: this.processContent(transaction.content)
+    };
     const response: CreateTransactionResponse = await this.wrapRoute(
-      Http.post(`/transactionals`, transaction)
+      Http.post(`/transactionals`, parsedData)
     );
 
     return response;
@@ -341,7 +360,7 @@ export default class RuleSDK {
       Http.get(`/templates`)
     );
 
-    return response;
+    return response.templates;
   };
 
   public getTemplate = async ({ id }: GetTemplateOptions) => {
@@ -370,7 +389,7 @@ export default class RuleSDK {
     identified_by = "name",
     with_count = true
   }: GetTagOptions) => {
-    const response: GetTagsResponse = await this.wrapRoute(
+    const response: Tag = await this.wrapRoute(
       Http.get(`/tags/${identifier}`, {
         params: {
           identified_by,
@@ -379,15 +398,15 @@ export default class RuleSDK {
       })
     );
 
-    return response.tags;
+    return response;
   };
 
   public updateTag = async ({ identifier, data }: UpdateTagOptions) => {
-    const response: GetTagsResponse = await this.wrapRoute(
+    const response: Tag = await this.wrapRoute(
       Http.put(`/tags/${identifier}`, data)
     );
 
-    return response.tags;
+    return response;
   };
 
   public deleteTag = async ({ identifier }: DeleteTagOptions) => {
@@ -505,7 +524,7 @@ export default class RuleSDK {
 
   public getCampaign = async (data: GetCampaignOptions) => {
     const response: Campaign = await this.wrapRoute(
-      Http.get(`/campaign/${data.id}`)
+      Http.get(`/campaigns/${data.id}`)
     );
 
     return response;
@@ -513,15 +532,19 @@ export default class RuleSDK {
 
   public getStatistics = async (data: GetCampaignStatisticsOptions) => {
     const response: CampaignStatistics = await this.wrapRoute(
-      Http.get(`/campaign/${data.id}/statistics`)
+      Http.get(`/campaigns/${data.id}/statistics`)
     );
 
     return response;
   };
 
   public sendCampaign = async (data: CreateCampaignOptions) => {
-    const response: SendCampaignResponse = await this.wrapRoute(
-      Http.post(`/campaign/send`, data)
+    const parsedData = {
+      ...data,
+      content: this.processContent(data.content)
+    };
+    const response: boolean = await this.wrapRoute(
+      Http.post(`/campaigns/send`, parsedData)
     );
 
     return response;
@@ -536,8 +559,16 @@ export default class RuleSDK {
   };
 
   public scheduleCampaign = async (data: ScheduleCampaignOptions) => {
+    const parsedData = {
+      ...data,
+      send_at:
+        data.send_at instanceof Date
+          ? data.send_at.toISOString().replace("T", " ")
+          : data.send_at,
+      content: this.processContent(data.content)
+    };
     const response: SendCampaignResponse = await this.wrapRoute(
-      Http.post(`/campaigns/schedule`, data)
+      Http.post(`/campaigns/schedule`, parsedData)
     );
 
     return response;
