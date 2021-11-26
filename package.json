@@ -14,11 +14,11 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "build:publish": "tsc && yarn publish",
-    "build:publish:major": "tsc && yarn version major && yarn publish",
-    "build:publish:minor": "tsc && yarn version minor && yarn publish",
-    "build:publish:patch": "tsc && yarn version patch && yarn publish",
-    "build:publish:prerelease": "tsc && yarn version prerelease && yarn publish",
+    "build:publish": "tsc && npm publish",
+    "build:publish:major": "tsc && yarn version major && npm publish",
+    "build:publish:minor": "tsc && yarn version minor && npm publish",
+    "build:publish:patch": "tsc && yarn version patch && npm publish",
+    "build:publish:prerelease": "tsc && yarn version prerelease && npm publish",
     "test": "jest",
     "test:watch": "jest --watch"
   },
