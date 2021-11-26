@@ -1,12 +1,12 @@
 {
   "name": "rule-sdk-node",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
-  "homepage": "https://github.com/Emad-salah/rule-sdk#readme",
+  "homepage": "https://github.com/rulecom/rule-sdk-node#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Emad-salah/rule-sdk.git"
+    "url": "https://github.com/rulecom/rule-sdk-node.git"
   },
   "files": [
     "./dist"
